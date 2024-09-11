@@ -5,9 +5,11 @@ class SecondaryContainer extends StatelessWidget {
   final String title;
   final String imgPath;
   final Widget content;
+  final Gradient? gradient;
+  final Color? titleColor;
 
   const SecondaryContainer({
-    super.key, required this.title, required this.imgPath, required this.content,
+    super.key, required this.title, required this.imgPath, required this.content, this.gradient, this.titleColor
 
   });
 
@@ -17,9 +19,13 @@ class SecondaryContainer extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16.0),
         margin: const EdgeInsets.all(5),
-        height: 160,
+        height: 170,
         decoration: BoxDecoration(
-          color: Colors.blue.shade100,
+         gradient: gradient ?? LinearGradient(
+           colors: [Colors.blue.shade100, Colors.blue.shade300],
+           begin: Alignment.topLeft,
+           end: Alignment.bottomRight,
+         ),
           borderRadius: BorderRadius.circular(12.0),
           boxShadow: const [
             BoxShadow(
@@ -36,7 +42,7 @@ class SecondaryContainer extends StatelessWidget {
               title,
               style: TextStyle(
                 fontSize: 15.0,
-                color: Colors.grey.shade600,
+                color: titleColor?? Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -47,6 +53,7 @@ class SecondaryContainer extends StatelessWidget {
               colorFilter: const ColorFilter.mode(
                   Colors.blue, BlendMode.srcIn),
             ),
+            const SizedBox(height: 5),
            content,
           ],
         ),

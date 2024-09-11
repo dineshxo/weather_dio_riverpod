@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weather_dio_riverpod/models/current_weather.dart';
 import 'package:weather_dio_riverpod/providers/current_weather_provider.dart';
 import 'package:weather_dio_riverpod/providers/theme_provider.dart';
-import 'package:weather_dio_riverpod/services/weather_services.dart';
 import 'package:weather_dio_riverpod/ui/components/secondary_container.dart';
 import 'package:weather_dio_riverpod/ui/components/main_search_bar.dart';
 import 'package:weather_dio_riverpod/ui/components/main_weather_container.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -52,8 +50,11 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          greeting,
-          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
+         'Hello, ${greeting} !',
+          style:  TextStyle( fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: Theme.of(context).colorScheme.inversePrimary),
+
         ),
         actions: [
           Padding(
@@ -137,39 +138,58 @@ class _HomePageState extends ConsumerState<HomePage> {
                               style: const TextStyle(
                                 fontSize: 30.0,
                                 fontWeight: FontWeight.w900,
+                                color: Colors.white
                               ),
                             ),
                             title: 'Humidity',
                             imgPath: 'images/humidity.svg',
                           ),
                           SecondaryContainer(
+                            title: 'Wind',
+                            imgPath: "images/wind.svg",
+                            content: Text('${weather.windSpeed}m/s',
+                              style:  const TextStyle(
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white,
+                              ),),
+                          ),
+
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          SecondaryContainer(
                             title: 'Temperature',
+                            titleColor: Colors.white,
                             imgPath: "images/temp.svg",
+gradient: LinearGradient(
+                  colors: [
+                    Colors.blue.shade100
+                        .withOpacity(0.3),
+                    Colors.blueAccent.shade100
+                        .withOpacity(0.5)
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  ),
                             content: Column(
                               children: [
                                 Text(
                                   'Min Temp: ${weather.temp.tempMin} °C',
                                   style: const TextStyle(
-                                    fontWeight: FontWeight.w900,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.white
                                   ),
                                 ),
                                 Text(
                                   'Max Temp: ${weather.temp.tempMax} °C',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w900,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          SecondaryContainer(
-                            title: 'Wind',
-                            imgPath: "images/wind.svg",
-                            content: Text('${weather.windSpeed}m/s'),
                           ),
                           sevenDaysContainer(),
                         ],
@@ -192,9 +212,16 @@ class _HomePageState extends ConsumerState<HomePage> {
       child: Container(
         padding: const EdgeInsets.all(16.0),
         margin: const EdgeInsets.all(5),
-        height: 160,
+        height:  170,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.tertiary,
+         gradient: LinearGradient(
+           colors: [
+             Colors.yellow.shade200,
+             Colors.yellow.shade800,
+           ],
+           begin: Alignment.topLeft,
+           end: Alignment.bottomRight,
+         ),
           borderRadius: BorderRadius.circular(12.0),
         ),
         child: Column(
@@ -203,19 +230,20 @@ class _HomePageState extends ConsumerState<HomePage> {
             Container(
               padding: const EdgeInsets.all(16.0),
               decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.limeAccent),
+                  shape: BoxShape.circle, color: Colors.white),
               child: const Icon(
                 Icons.arrow_forward_ios_sharp,
                 color: Colors.black54,
               ),
             ),
             const SizedBox(height: 10),
-            Text(
+            const Text(
               " See 7 days Forecast",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 13.0,
-                color: Theme.of(context).colorScheme.inversePrimary,
+                // color: Theme.of(context).colorScheme.inversePrimary,
+                color: Colors.black54,
                 fontWeight: FontWeight.bold,
               ),
             ),
