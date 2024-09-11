@@ -3,14 +3,15 @@ class CurrentWeather {
   final String weatherType;
   final String weatherDesc;
   final String icon;
+  final double windSpeed;
   final Temp temp;
 
-  CurrentWeather({
+  CurrentWeather( {
     required this.weatherType,
     required this.weatherDesc,
     required this.icon,
     required this.temp,
-    required this.cityName,
+    required this.cityName, required this.windSpeed,
   });
 
   factory CurrentWeather.fromJson(Map<String, dynamic> json) {
@@ -30,6 +31,7 @@ class CurrentWeather {
       weatherType:weatherData['main'],
       weatherDesc: weatherData['description'],
       icon: weatherData['icon'],
+      windSpeed:json["wind"]["speed"],
       temp: temp,
     );
   }
@@ -52,11 +54,16 @@ class Temp {
 
   factory Temp.fromJson(Map<String, dynamic> json) {
     return Temp(
-      temp: (json['temp'] as num).toDouble(),
-      feelsLike: (json['feels_like'] as num).toDouble(),
-      tempMin: (json['temp_min'] as num).toDouble(),
-      tempMax: (json['temp_max'] as num).toDouble(),
+      temp: _kelvinToCelsius(json['temp']),
+      feelsLike: _kelvinToCelsius(json['feels_like']),
+      tempMin: _kelvinToCelsius(json['temp_min']),
+      tempMax: _kelvinToCelsius(json['temp_max']),
       humidity: json['humidity'] as int,
     );
   }
+
+  static double _kelvinToCelsius(double kelvin) {
+    return double.parse((kelvin - 273.15).toStringAsFixed(1));
+  }
 }
+
