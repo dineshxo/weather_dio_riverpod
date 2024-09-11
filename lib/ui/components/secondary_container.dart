@@ -27,11 +27,11 @@ class SecondaryContainer extends StatelessWidget {
            end: Alignment.bottomRight,
          ),
           borderRadius: BorderRadius.circular(12.0),
-          boxShadow: const [
+          boxShadow:  [
             BoxShadow(
-              color: Colors.grey,
+              color: Colors.grey.withOpacity(0.4),
               blurRadius: 3.0,
-              offset:  Offset(0, 1),
+              offset: const Offset(0, 1),
             ),
           ],
         ),

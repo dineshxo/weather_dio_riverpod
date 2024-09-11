@@ -50,16 +50,16 @@ class MainWeatherContainer extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: _getGradient(temp),
         borderRadius: BorderRadius.circular(12.0),
-        boxShadow:const [
+        boxShadow: [
            BoxShadow(
-            color: Colors.grey,
+            color: Colors.grey.withOpacity(0.4),
             blurRadius: 4.0,
-            offset:  Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
       child: Column(
-
+crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             location,

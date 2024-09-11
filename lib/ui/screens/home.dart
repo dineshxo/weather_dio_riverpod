@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:weather_dio_riverpod/providers/current_weather_provider.dart';
 import 'package:weather_dio_riverpod/providers/theme_provider.dart';
 import 'package:weather_dio_riverpod/ui/components/secondary_container.dart';
 import 'package:weather_dio_riverpod/ui/components/main_search_bar.dart';
 import 'package:weather_dio_riverpod/ui/components/main_weather_container.dart';
+import 'package:weather_dio_riverpod/ui/screens/favorite_page.dart';
 
+import '../../providers/favorite_provider.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -16,7 +19,7 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   TextEditingController searchController = TextEditingController();
-  String text = '';
+  String city = "Colombo";
 
   String _getGreeting(int hour) {
     if (hour < 12) {
@@ -39,10 +42,27 @@ class _HomePageState extends ConsumerState<HomePage> {
     ref.refresh(currentWeatherProvider(city));
   }
 
+  void showCustomSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(
+        message,
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+      backgroundColor: Colors.green,
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 2),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final city = searchController.text;
     final _currentWeather = ref.watch(currentWeatherProvider(city));
+
     int hour = DateTime.now().hour;
     String greeting = _getGreeting(hour);
     bool isLightTheme = ref.watch(themeProvider);
@@ -50,36 +70,65 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-         'Hello, ${greeting} !',
-          style:  TextStyle( fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: Theme.of(context).colorScheme.inversePrimary),
-
+          'Hello, $greeting !',
+          style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.inversePrimary),
         ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                  color: isLightTheme ? Colors.grey : Colors.limeAccent,
-                  shape: BoxShape.circle),
-              child: IconButton(
-                onPressed: () {
-                  toggleTheme(ref);
-                },
-                icon: isLightTheme
-                    ? const Icon(
-                        Icons.dark_mode,
+            child: Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: isLightTheme ? Colors.grey : Colors.limeAccent,
+                      shape: BoxShape.circle),
+                  child: IconButton(
+                    onPressed: () {
+                      toggleTheme(ref);
+                    },
+                    icon: isLightTheme
+                        ? const Icon(
+                            Icons.dark_mode,
+                            color: Colors.white,
+                          )
+                        : const Icon(
+                            Icons.light_mode,
+                            color: Colors.black54,
+                          ),
+                  ),
+                ),
+                Container(
+                  decoration: const BoxDecoration(
+                      color: Colors.pinkAccent, shape: BoxShape.circle),
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>const FavoritePage()));
+                      },
+                      icon: const Icon(
+                        Icons.favorite,
                         color: Colors.white,
-                      )
-                    : const Icon(
-                        Icons.light_mode,
-                        color: Colors.black54,
-                      ),
-              ),
+                      )),
+                ),
+              ],
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          ref.read(favoriteProvider.notifier).addFavorite(city);
+          showCustomSnackBar(context,'$city added to favorites');
+        },
+        child: SvgPicture.asset('images/addFavorite.svg',
+          colorFilter: const ColorFilter.mode(
+              Colors.pink, BlendMode.srcIn),
+        width: 30,),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -98,7 +147,13 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      ref.refresh(currentWeatherProvider(city));
+                      if (searchController.text.isNotEmpty) {
+                        setState(() {
+                          city = searchController.text;
+                        });
+                      }
+
+                      searchController.clear();
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -136,10 +191,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                             content: Text(
                               '${weather.temp.humidity} %',
                               style: const TextStyle(
-                                fontSize: 30.0,
-                                fontWeight: FontWeight.w900,
-                                color: Colors.white
-                              ),
+                                  fontSize: 30.0,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white),
                             ),
                             title: 'Humidity',
                             imgPath: 'images/humidity.svg',
@@ -147,13 +201,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                           SecondaryContainer(
                             title: 'Wind',
                             imgPath: "images/wind.svg",
-                            content: Text('${weather.windSpeed}m/s',
-                              style:  const TextStyle(
+                            content: Text(
+                              '${weather.windSpeed}m/s',
+                              style: const TextStyle(
+                                fontSize: 30,
                                 fontWeight: FontWeight.w900,
                                 color: Colors.white,
-                              ),),
+                              ),
+                            ),
                           ),
-
                         ],
                       ),
                       Row(
@@ -162,24 +218,21 @@ class _HomePageState extends ConsumerState<HomePage> {
                             title: 'Temperature',
                             titleColor: Colors.white,
                             imgPath: "images/temp.svg",
-gradient: LinearGradient(
-                  colors: [
-                    Colors.blue.shade100
-                        .withOpacity(0.3),
-                    Colors.blueAccent.shade100
-                        .withOpacity(0.5)
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  ),
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.blue.shade100.withOpacity(0.3),
+                                Colors.blueAccent.shade100.withOpacity(0.5)
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
                             content: Column(
                               children: [
                                 Text(
                                   'Min Temp: ${weather.temp.tempMin} °C',
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w900,
-                                      color: Colors.white
-                                  ),
+                                      color: Colors.white),
                                 ),
                                 Text(
                                   'Max Temp: ${weather.temp.tempMax} °C',
@@ -212,16 +265,16 @@ gradient: LinearGradient(
       child: Container(
         padding: const EdgeInsets.all(16.0),
         margin: const EdgeInsets.all(5),
-        height:  170,
+        height: 170,
         decoration: BoxDecoration(
-         gradient: LinearGradient(
-           colors: [
-             Colors.yellow.shade200,
-             Colors.yellow.shade800,
-           ],
-           begin: Alignment.topLeft,
-           end: Alignment.bottomRight,
-         ),
+          gradient: LinearGradient(
+            colors: [
+              Colors.yellow.shade200,
+              Colors.yellow.shade800,
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
           borderRadius: BorderRadius.circular(12.0),
         ),
         child: Column(
