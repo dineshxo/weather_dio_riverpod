@@ -14,15 +14,22 @@ class FavoriteNotifier extends StateNotifier<List<String>> {
     }
   }
 
-  Future<void> addFavorite(String item) async {
-    final updatedList = List<String>.from(state)..add(item);
-    state = updatedList;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList('favorites', updatedList);
+  Future<void> addFavorite(String city) async {
+    final updatedList = List<String>.from(state);
+
+    if (!updatedList.contains(city)) {
+      updatedList.add(city);
+      state = updatedList;
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setStringList('favorites', updatedList);
+    } else {
+      print("Item is already in the favorites list.");
+    }
   }
 
-  Future<void> removeFavorite(String item) async {
-    final updatedList = List<String>.from(state)..remove(item);
+
+  Future<void> removeFavorite(String city) async {
+    final updatedList = List<String>.from(state)..remove(city);
     state = updatedList;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setStringList('favorites', updatedList);

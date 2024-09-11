@@ -49,7 +49,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
       backgroundColor: Colors.green,
-      behavior: SnackBarBehavior.floating,
+
       duration: const Duration(seconds: 2),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),

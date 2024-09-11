@@ -64,7 +64,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
           Text(
             location,
             style: const TextStyle(
-              fontSize: 30.0,
+              fontSize: 28.0,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
