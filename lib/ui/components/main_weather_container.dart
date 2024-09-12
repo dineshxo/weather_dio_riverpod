@@ -82,7 +82,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                     Text(
                       '$temperature°C',
                       style: const TextStyle(
-                        fontSize: 48.0,
+                        fontSize: 45.0,
                         fontWeight: FontWeight.w900,
                         color: Colors.white,
                       ),
