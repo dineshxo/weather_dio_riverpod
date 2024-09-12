@@ -28,6 +28,7 @@ class FavoritePage extends ConsumerWidget {
               fontWeight: FontWeight.w600,
               color: Theme.of(context).colorScheme.inversePrimary),
         ),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -89,7 +90,20 @@ class FavoritePage extends ConsumerWidget {
                     );
                   },
                   loading: () => const CircularProgressIndicator(),
-                  error: (e, stack) => Text('Error: $e'),
+                  error: (e, stack) => Container(
+                  decoration: BoxDecoration(
+                    color:   Colors.red.withOpacity(0.7),
+                    borderRadius: BorderRadius.circular(20)
+                  ),
+                    padding:const EdgeInsets.symmetric(vertical: 3) ,
+                    margin:const EdgeInsets.symmetric(vertical: 3),
+                    child: ListTile(
+                    
+                      leading: const Icon(Icons.error, color: Colors.white,size: 40,),
+                      title: const Text('No Connection', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                      subtitle: Text('$e'),
+                    ),
+                  ),
                 );
           },
         ),

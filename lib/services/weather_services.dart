@@ -24,7 +24,7 @@ class WeatherServices {
        }
      } catch (err) {
        print('Something went Wrong when fetching current weather : $err');
-       throw Exception('Failed to load weather data');
+       throw Exception('Something went wrong.');
      }
   }
 
