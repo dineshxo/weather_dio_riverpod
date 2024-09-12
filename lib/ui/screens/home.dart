@@ -39,9 +39,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         !ref.read(themeProvider.notifier).state;
   }
 
-  Future<void> _fetchWeather({required String city}) async {
-    ref.refresh(currentWeatherProvider(city));
-  }
+
 
   void showCustomSnackBar(BuildContext context, String message) {
     final snackBar = SnackBar(
@@ -63,7 +61,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final _currentWeather = ref.watch(currentWeatherProvider(city));
+    final currentWeather = ref.watch(currentWeatherProvider(city));
 
     int hour = DateTime.now().hour;
     String greeting = _getGreeting(hour);
@@ -166,7 +164,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               const SizedBox(
                 height: 10,
               ),
-              _currentWeather.when(
+              currentWeather.when(
                   data: (weather) {
                     setState(() {
                       isError = true;
@@ -296,7 +294,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           children: [
             GestureDetector(
               child: Container(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(15.0),
                 decoration: BoxDecoration(boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.5),
@@ -307,6 +305,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 child: const Icon(
                   Icons.arrow_forward_ios_sharp,
                   color: Colors.black54,
+                  size: 30,
                 ),
               ),
               onTap: () {
@@ -349,7 +348,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           Icon(Icons.refresh, size: 80, color: Colors.red.withOpacity(0.7)),
           const SizedBox(height: 10),
           Text(
-            'City Not Found, Try Again !',
+            'City Not Found or No Connection !',
             style: TextStyle(
                 fontSize: 20,
                 color: Theme.of(context).colorScheme.inversePrimary,

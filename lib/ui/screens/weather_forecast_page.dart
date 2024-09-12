@@ -14,7 +14,7 @@ class WeatherForecastScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
 
     final coordinates = Tuple2(lat, lon);
-    final dailyWeatherAsyncValue = ref.watch(dailyWeatherProvider(coordinates));
+    final dailyWeather = ref.watch(dailyWeatherProvider(coordinates));
 
     return Scaffold(
       appBar: AppBar(
@@ -35,12 +35,11 @@ class WeatherForecastScreen extends ConsumerWidget {
           ),
         ),
       ),
-      body: dailyWeatherAsyncValue.when(
+      body: dailyWeather.when(
         data: (dailyWeatherList) {
           if (dailyWeatherList.isEmpty) {
             return const Center(child: Text('No data available'));
           }
-
           return ListView.builder(
             itemCount: dailyWeatherList.length,
             itemBuilder: (context, index) {
@@ -52,8 +51,8 @@ class WeatherForecastScreen extends ConsumerWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Colors.blue.shade100.withOpacity(0.3),
-                      Colors.blueAccent.shade100.withOpacity(0.5)
+                      Colors.blue.shade100.withOpacity(0.4),
+                      Colors.blueAccent.shade100.withOpacity(0.6)
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -89,7 +88,6 @@ class WeatherForecastScreen extends ConsumerWidget {
                           margin: const EdgeInsets.symmetric(vertical: 4.0),
                           padding: const EdgeInsets.all(8.0),
                           decoration: BoxDecoration(
-
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           child: Row(
