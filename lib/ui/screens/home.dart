@@ -245,14 +245,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                               ],
                             ),
                           ),
-                          sevenDaysContainer(),
+                          sevenDaysContainer(lat: weather.lat, lon: weather.lon),
                         ],
                       )
                     ],
                   );
                 },
                 loading: () => const CircularProgressIndicator(),
-                error: (e, stack) => Text('Error: $e'),
+                error: (e, stack) => Center(child: displayError('$e')),
               ),
             ],
           ),
@@ -261,7 +261,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  Widget sevenDaysContainer() {
+  Widget sevenDaysContainer({required double lat,required double lon}) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(16.0),
@@ -292,7 +292,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
               ),
               onTap: (){
-               Navigator.push(context, MaterialPageRoute(builder: (context)=> const WeatherForecastScreen()));
+               Navigator.push(context, MaterialPageRoute(builder: (context)=>  WeatherForecastScreen(
+                 lat: lat, lon: lon,
+               )));
               },
             ),
             const SizedBox(height: 10),
@@ -311,4 +313,26 @@ class _HomePageState extends ConsumerState<HomePage> {
       ),
     );
   }
+
+  Widget displayError(String errorText) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    return Padding(
+
+      padding:  EdgeInsets.only(top: screenHeight/3.5),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Icon(Icons.error, size: 80, color: Colors.red),
+          SizedBox(height: 10),
+          Text(
+            errorText,
+            style: TextStyle(fontSize: 18, color: Colors.black),
+          ),
+        ],
+      ),
+    );
+  }
+
+
 }

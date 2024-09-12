@@ -1,5 +1,7 @@
 class CurrentWeather {
   final String cityName;
+  final double lon;
+  final double lat;
   final String weatherType;
   final String weatherDesc;
   final String icon;
@@ -11,7 +13,10 @@ class CurrentWeather {
     required this.weatherDesc,
     required this.icon,
     required this.temp,
-    required this.cityName, required this.windSpeed,
+    required this.cityName,
+    required this.windSpeed,
+    required this.lat,
+    required this.lon,
   });
 
   factory CurrentWeather.fromJson(Map<String, dynamic> json) {
@@ -27,6 +32,8 @@ class CurrentWeather {
     final weatherData = weatherList[0] as Map<String, dynamic>;
 
     return CurrentWeather(
+      lat: (json["coord"]["lat"] as num).toDouble(),
+      lon: (json["coord"]["lon"] as num).toDouble(),
       cityName: json['name'] as String,
       weatherType:weatherData['main'],
       weatherDesc: weatherData['description'],

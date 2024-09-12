@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tuple/tuple.dart';
 import 'package:weather_dio_riverpod/models/current_weather.dart';
 import 'package:weather_dio_riverpod/services/weather_services.dart';
 import 'package:dio/dio.dart';
@@ -18,16 +19,22 @@ final weatherServicesProvider = Provider<WeatherServices>((ref) {
 
 final currentWeatherProvider = FutureProvider.family<CurrentWeather, String>((ref, String city) {
   final weatherService = ref.read(weatherServicesProvider);
-  return weatherService.fetchWeather(city);
+  return weatherService.fetchCurrentWeather(city);
 });
 
-final weatherProvider = FutureProvider<List<Weather>>((ref)  {
+
+
+final weatherProvider = FutureProvider.family<List<Weather>, Tuple2<double, double>>((ref, coordinates) {
   final weatherService = ref.read(weatherServicesProvider);
-  return weatherService.fetchWeatherData(); // Call the service function
+  final lat = coordinates.item1;
+  final lon = coordinates.item2;
+  return weatherService.fetchWeatherForecastData(lat: lat, lon: lon);
 });
 
-// Aggregating weather data by day
-final dailyWeatherProvider = FutureProvider<List<DailyWeather>>((ref) async {
-  final weatherList = await ref.watch(weatherProvider.future);
+
+
+final dailyWeatherProvider = FutureProvider.family<List<DailyWeather>, Tuple2<double, double>>((ref, coordinates) async {
+  final weatherList = await ref.watch(weatherProvider(coordinates).future);
   return aggregateWeatherData(weatherList);
 });
+

@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tuple/tuple.dart';
 import '../../providers/weather_provider.dart';
 import 'package:intl/intl.dart';
 
 class WeatherForecastScreen extends ConsumerWidget {
-  const WeatherForecastScreen({super.key});
+  const WeatherForecastScreen({required this.lat,required this.lon, super.key,});
+
+  final double lat;
+  final double lon;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dailyWeatherAsyncValue = ref.watch(dailyWeatherProvider);
+
+    final coordinates = Tuple2(lat, lon);
+    final dailyWeatherAsyncValue = ref.watch(dailyWeatherProvider(coordinates));
 
     return Scaffold(
       appBar: AppBar(
