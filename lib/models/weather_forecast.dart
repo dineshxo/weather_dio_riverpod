@@ -19,10 +19,16 @@ class Weather {
 
     return Weather(
       dateTimeUnix: json['dt'],
-      temperature: main['temp'].toDouble(),
+      temperature: _kelvinToCelsius(main['temp'].toDouble()),
       description: weather['description'],
       icon: weather['icon'],
       dateTimeText: json['dt_txt'],
     );
+
+
+  }
+
+  static double _kelvinToCelsius(double kelvin) {
+    return double.parse((kelvin - 273.15).toStringAsFixed(1));
   }
 }

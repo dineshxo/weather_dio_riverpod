@@ -51,7 +51,7 @@ class SecondaryContainer extends StatelessWidget {
               imgPath,
               width: 50,
               colorFilter: const ColorFilter.mode(
-                  Colors.blue, BlendMode.srcIn),
+                  Colors.black54, BlendMode.srcIn),
             ),
             const SizedBox(height: 5),
            content,
