@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weather_dio_riverpod/providers/weather_provider.dart';
+import 'package:weather_dio_riverpod/ui/screens/weather_forecast_page.dart';
 import '../../providers/favorite_provider.dart';
 import '../components/main_weather_container.dart';
 
@@ -46,7 +47,9 @@ class FavoritePage extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(30),
                         ),
                         alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0,),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0,
+                        ),
                         child: const Icon(
                           Icons.delete,
                           color: Colors.white,
@@ -65,12 +68,23 @@ class FavoritePage extends ConsumerWidget {
                           ),
                         );
                       },
-                      child: MainWeatherContainer(
-                        imgPath: weather.icon,
-                        location: weather.cityName,
-                        temperature: weather.temp.temp.toString(),
-                        description: weather.weatherDesc,
-                        feelsLike: weather.temp.feelsLike.toString(),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WeatherForecastScreen(
+                                  lat: weather.lat, lon: weather.lon),
+                            ),
+                          );
+                        },
+                        child: MainWeatherContainer(
+                          imgPath: weather.icon,
+                          location: weather.cityName,
+                          temperature: weather.temp.temp.toString(),
+                          description: weather.weatherDesc,
+                          feelsLike: weather.temp.feelsLike.toString(),
+                        ),
                       ),
                     );
                   },

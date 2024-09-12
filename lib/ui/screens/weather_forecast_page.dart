@@ -18,6 +18,14 @@ class WeatherForecastScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(
+            Icons.arrow_back_ios_rounded,
+            color: Theme.of(context).colorScheme.inversePrimary,
+          ),
+        ),
         title: Text(
           'Weather Forecast',
           style: TextStyle(
@@ -42,14 +50,21 @@ class WeatherForecastScreen extends ConsumerWidget {
                 margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 padding: const EdgeInsets.all(12.0),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.blue.shade100.withOpacity(0.3),
+                      Colors.blueAccent.shade100.withOpacity(0.5)
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   borderRadius: BorderRadius.circular(8.0),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
+                      color: Colors.grey.withOpacity(0.2),
                       spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
+                      blurRadius: 3,
+                      offset: const Offset(0, 1),
                     ),
                   ],
                 ),
@@ -62,7 +77,7 @@ class WeatherForecastScreen extends ConsumerWidget {
                       style: const TextStyle(
                         fontSize: 19,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black54
+
                       ),
                     ),
                     const SizedBox(height: 8.0),
@@ -74,7 +89,7 @@ class WeatherForecastScreen extends ConsumerWidget {
                           margin: const EdgeInsets.symmetric(vertical: 4.0),
                           padding: const EdgeInsets.all(8.0),
                           decoration: BoxDecoration(
-                            color: Colors.blue[50], // Customize background color
+
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           child: Row(
@@ -82,8 +97,8 @@ class WeatherForecastScreen extends ConsumerWidget {
                             children: [
 
                               SizedBox(
-                                width: 40,
-                                height: 40,
+                                width: 50,
+                                height: 50,
                                 child: Image.network(
                                   'http://openweathermap.org/img/wn/${weather.icon}.png',
                                   fit: BoxFit.contain,
@@ -97,7 +112,7 @@ class WeatherForecastScreen extends ConsumerWidget {
                                   DateFormat('HH:mm').format(
                                     DateTime.fromMillisecondsSinceEpoch(weather.dateTimeUnix * 1000),
                                   ),
-                                  style: const TextStyle(fontSize: 16),
+                                  style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
                                 ),
                               ),
 
@@ -114,7 +129,7 @@ class WeatherForecastScreen extends ConsumerWidget {
                                       ),
                                       Text(
                                         weather.description,
-                                        style: const TextStyle(fontSize: 14, color: Colors.grey,fontWeight: FontWeight.w900),
+                                        style:  TextStyle(fontSize: 14, color:Theme.of(context).colorScheme.inversePrimary,fontWeight: FontWeight.w900),
                                         textAlign: TextAlign.end,
                                       ),
                                     ],
