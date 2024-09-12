@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weather_dio_riverpod/providers/current_weather_provider.dart';
+import 'package:weather_dio_riverpod/providers/weather_provider.dart';
 import '../../providers/favorite_provider.dart';
 import '../components/main_weather_container.dart';
 

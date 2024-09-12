@@ -31,7 +31,7 @@ class WeatherServices {
 
   Future<List<Weather>> fetchWeatherData() async {
 
-     final String weatherForecastURL = "https://api.openweathermap.org/data/2.5/forecast?lat=44.34&lon=10.99&appid=$APIKEY";
+     const String weatherForecastURL = "https://api.openweathermap.org/data/2.5/forecast?lat=44.34&lon=10.99&appid=$APIKEY";
     try {
       final response = await dio.get(weatherForecastURL);
 

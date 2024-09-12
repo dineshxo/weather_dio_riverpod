@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:weather_dio_riverpod/providers/current_weather_provider.dart';
+import 'package:weather_dio_riverpod/providers/weather_provider.dart';
 import 'package:weather_dio_riverpod/providers/theme_provider.dart';
 import 'package:weather_dio_riverpod/ui/components/secondary_container.dart';
 import 'package:weather_dio_riverpod/ui/components/main_search_bar.dart';
 import 'package:weather_dio_riverpod/ui/components/main_weather_container.dart';
 import 'package:weather_dio_riverpod/ui/screens/favorite_page.dart';
+import 'package:weather_dio_riverpod/ui/screens/weather_forecast_page.dart';
 
 import '../../providers/favorite_provider.dart';
 
@@ -49,7 +50,6 @@ class _HomePageState extends ConsumerState<HomePage> {
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
       backgroundColor: Colors.green,
-
       duration: const Duration(seconds: 2),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -83,7 +83,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                      color: isLightTheme ? Colors.grey : Colors.limeAccent,
+                      color: isLightTheme ? Colors.black54 : Colors.limeAccent,
                       shape: BoxShape.circle),
                   child: IconButton(
                     onPressed: () {
@@ -108,7 +108,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>const FavoritePage()));
+                                builder: (context) => const FavoritePage()));
                       },
                       icon: const Icon(
                         Icons.favorite,
@@ -123,12 +123,13 @@ class _HomePageState extends ConsumerState<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           ref.read(favoriteProvider.notifier).addFavorite(city);
-          showCustomSnackBar(context,'$city added to favorites');
+          showCustomSnackBar(context, '$city added to favorites');
         },
-        child: SvgPicture.asset('images/addFavorite.svg',
-          colorFilter: const ColorFilter.mode(
-              Colors.pink, BlendMode.srcIn),
-        width: 30,),
+        child: SvgPicture.asset(
+          'images/addFavorite.svg',
+          colorFilter: const ColorFilter.mode(Colors.pink, BlendMode.srcIn),
+          width: 30,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -152,7 +153,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                           city = searchController.text;
                         });
                       }
-
                       searchController.clear();
                     },
                     child: Container(
@@ -161,7 +161,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       decoration: BoxDecoration(
                         // color: Theme.of(context).colorScheme.tertiary,
                         // color: const Color.fromRGBO(23, 51, 63, 1),
-                        color: Colors.blueAccent,
+                        color: Colors.black54,
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: const Icon(
@@ -281,14 +281,19 @@ class _HomePageState extends ConsumerState<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.white),
-              child: const Icon(
-                Icons.arrow_forward_ios_sharp,
-                color: Colors.black54,
+            GestureDetector(
+              child: Container(
+                padding: const EdgeInsets.all(16.0),
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: Colors.white),
+                child: const Icon(
+                  Icons.arrow_forward_ios_sharp,
+                  color: Colors.black54,
+                ),
               ),
+              onTap: (){
+               Navigator.push(context, MaterialPageRoute(builder: (context)=> const WeatherForecastScreen()));
+              },
             ),
             const SizedBox(height: 10),
             const Text(
