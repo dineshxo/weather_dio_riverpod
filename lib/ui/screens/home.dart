@@ -41,23 +41,11 @@ class _HomePageState extends ConsumerState<HomePage> {
 
 
 
-  void showCustomSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(
-        message,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      ),
-      backgroundColor: Colors.green,
-      duration: const Duration(seconds: 2),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-    );
 
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
 
   bool isError = false;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -249,7 +237,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     setState(() {
                       isError = false;
                     });
-                    return Center(child: displayError('$e'));
+                    return Center(child: displayError());
                   }),
             ],
           ),
@@ -259,7 +247,12 @@ class _HomePageState extends ConsumerState<HomePage> {
           ? FloatingActionButton(
               onPressed: () {
                 ref.read(favoriteProvider.notifier).addFavorite(city);
-                showCustomSnackBar(context, '$city added to favorites');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('$city added from favorites'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
               },
               child: SvgPicture.asset(
                 'images/addFavorite.svg',
@@ -337,7 +330,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  Widget displayError(String errorText) {
+  Widget displayError() {
     double screenHeight = MediaQuery.of(context).size.height;
     return Padding(
       padding: EdgeInsets.only(top: screenHeight / 3.5),
@@ -345,17 +338,19 @@ class _HomePageState extends ConsumerState<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         children: [
-          Icon(Icons.refresh, size: 80, color: Colors.red.withOpacity(0.7)),
+          IconButton(onPressed: (){
+            ref.refresh(currentWeatherProvider(city));
+          }, icon: Icon(Icons.refresh, size: 60, color: Colors.red.withOpacity(0.7))),
           const SizedBox(height: 10),
           Text(
             'City Not Found or No Connection !',
             style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 color: Theme.of(context).colorScheme.inversePrimary,
-                fontWeight: FontWeight.bold),
+                ),
           ),
           Text(
-            errorText,
+            "Something went wrong.",
             style: TextStyle(
                 fontSize: 13,
                 color: Theme.of(context).colorScheme.inversePrimary,
