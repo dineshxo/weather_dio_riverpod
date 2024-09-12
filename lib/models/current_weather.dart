@@ -31,7 +31,7 @@ class CurrentWeather {
       weatherType:weatherData['main'],
       weatherDesc: weatherData['description'],
       icon: weatherData['icon'],
-      windSpeed:json["wind"]["speed"],
+      windSpeed: (json["wind"]["speed"] as num).toDouble(),
       temp: temp,
     );
   }
@@ -54,10 +54,10 @@ class Temp {
 
   factory Temp.fromJson(Map<String, dynamic> json) {
     return Temp(
-      temp: _kelvinToCelsius(json['temp']),
-      feelsLike: _kelvinToCelsius(json['feels_like']),
-      tempMin: _kelvinToCelsius(json['temp_min']),
-      tempMax: _kelvinToCelsius(json['temp_max']),
+      temp: _kelvinToCelsius((json['temp'] as num).toDouble()),
+      feelsLike: _kelvinToCelsius((json['feels_like'] as num).toDouble()),
+      tempMin: _kelvinToCelsius((json['temp_min'] as num).toDouble()),
+      tempMax: _kelvinToCelsius((json['temp_max'] as num).toDouble()),
       humidity: json['humidity'] as int,
     );
   }

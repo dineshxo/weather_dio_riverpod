@@ -3,6 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:weather_dio_riverpod/constants/constants.dart';
 import 'package:weather_dio_riverpod/models/current_weather.dart';
 
+import '../models/weather_forecast.dart';
+
 
 class WeatherServices {
   WeatherServices({required this.dio});
@@ -25,7 +27,25 @@ class WeatherServices {
        throw Exception('Failed to load weather data');
      }
   }
+
+
+  Future<List<Weather>> fetchWeatherData() async {
+
+     final String weatherForecastURL = "https://api.openweathermap.org/data/2.5/forecast?lat=44.34&lon=10.99&appid=$APIKEY";
+    try {
+      final response = await dio.get(weatherForecastURL);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data['list'];
+        return data.map((json) => Weather.fromJson(json)).toList();
+      } else {
+        throw Exception('Failed to load weather data');
+      }
+    } catch (e) {
+      throw Exception('Failed to load weather data: $e');
+    }
+  }
 }
 
 
-// static const weatherLatLonURL = 'https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=5058ed6e6d06bf91b6ef2ef25d80526e';
+

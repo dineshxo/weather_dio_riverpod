@@ -102,7 +102,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
                 Container(
                   decoration: const BoxDecoration(
-                      color: Colors.pinkAccent, shape: BoxShape.circle),
+                      color: Colors.redAccent, shape: BoxShape.circle),
                   child: IconButton(
                       onPressed: () {
                         Navigator.push(
@@ -160,7 +160,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                           vertical: 12, horizontal: 12),
                       decoration: BoxDecoration(
                         // color: Theme.of(context).colorScheme.tertiary,
-                        color: const Color.fromRGBO(23, 51, 63, 1),
+                        // color: const Color.fromRGBO(23, 51, 63, 1),
+                        color: Colors.blueAccent,
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: const Icon(
