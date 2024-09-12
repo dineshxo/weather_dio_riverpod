@@ -1,5 +1,7 @@
 class CurrentWeather {
   final String cityName;
+  final double lon;
+  final double lat;
   final String weatherType;
   final String weatherDesc;
   final String icon;
@@ -11,7 +13,10 @@ class CurrentWeather {
     required this.weatherDesc,
     required this.icon,
     required this.temp,
-    required this.cityName, required this.windSpeed,
+    required this.cityName,
+    required this.windSpeed,
+    required this.lat,
+    required this.lon,
   });
 
   factory CurrentWeather.fromJson(Map<String, dynamic> json) {
@@ -27,11 +32,13 @@ class CurrentWeather {
     final weatherData = weatherList[0] as Map<String, dynamic>;
 
     return CurrentWeather(
+      lat: (json["coord"]["lat"] as num).toDouble(),
+      lon: (json["coord"]["lon"] as num).toDouble(),
       cityName: json['name'] as String,
       weatherType:weatherData['main'],
       weatherDesc: weatherData['description'],
       icon: weatherData['icon'],
-      windSpeed:json["wind"]["speed"],
+      windSpeed: (json["wind"]["speed"] as num).toDouble(),
       temp: temp,
     );
   }
@@ -54,10 +61,10 @@ class Temp {
 
   factory Temp.fromJson(Map<String, dynamic> json) {
     return Temp(
-      temp: _kelvinToCelsius(json['temp']),
-      feelsLike: _kelvinToCelsius(json['feels_like']),
-      tempMin: _kelvinToCelsius(json['temp_min']),
-      tempMax: _kelvinToCelsius(json['temp_max']),
+      temp: _kelvinToCelsius((json['temp'] as num).toDouble()),
+      feelsLike: _kelvinToCelsius((json['feels_like'] as num).toDouble()),
+      tempMin: _kelvinToCelsius((json['temp_min'] as num).toDouble()),
+      tempMax: _kelvinToCelsius((json['temp_max'] as num).toDouble()),
       humidity: json['humidity'] as int,
     );
   }

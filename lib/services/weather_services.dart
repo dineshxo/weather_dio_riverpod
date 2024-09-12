@@ -3,15 +3,15 @@ import 'package:dio/dio.dart';
 import 'package:weather_dio_riverpod/constants/constants.dart';
 import 'package:weather_dio_riverpod/models/current_weather.dart';
 
+import '../models/weather_forecast.dart';
+
 
 class WeatherServices {
-
-  // static const weatherLatLonURL = 'https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=5058ed6e6d06bf91b6ef2ef25d80526e';
-
-  static final Dio dio =Dio();
+  WeatherServices({required this.dio});
+   final Dio dio;
 
 
-  static Future<CurrentWeather> fetchWeather(String city)async{
+   Future<CurrentWeather> fetchCurrentWeather(String city)async{
      final String weatherCityURL= 'https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$APIKEY';
      try {
        final response = await dio.get(weatherCityURL);
@@ -20,11 +20,35 @@ class WeatherServices {
          final Map<String, dynamic> json = response.data;
          return CurrentWeather.fromJson(json);
        } else {
-         throw Exception('Failed to load weather data');
+         throw Exception('Failed to load current weather data - response error');
        }
      } catch (err) {
-       print('Something went Wrong: $err');
+       print('Something went Wrong when fetching current weather : $err');
        throw Exception('Failed to load weather data');
      }
   }
+
+
+  Future<List<Weather>> fetchWeatherForecastData(
+      {required double lat,required double lon}) async {
+
+      print('lat : $lat');
+      print('lon : $lon');
+     final String weatherForecastURL = "https://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$lon&appid=$APIKEY";
+    try {
+      final response = await dio.get(weatherForecastURL);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data['list'];
+        return data.map((json) => Weather.fromJson(json)).toList();
+      } else {
+        throw Exception('Failed to fetch weather forecast - response error ');
+      }
+    } catch (e) {
+      throw Exception('Failed to load weather forecast: $e');
+    }
+  }
 }
+
+
+

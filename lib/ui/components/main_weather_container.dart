@@ -111,7 +111,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
               SizedBox(
                 width: 150,
                 height: 150,
-                child: Image.asset('images/weather_images/${imgPath.replaceAll('n', 'd')}.png'),
+                child: Image.network('http://openweathermap.org/img/wn/$imgPath@4x.png'),
               ),
             ],
           ),
