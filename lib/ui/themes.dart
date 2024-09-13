@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 ThemeData darkMode = ThemeData(
-    fontFamily: GoogleFonts.inter().fontFamily,
+    // fontFamily: GoogleFonts.inter().fontFamily,
+    fontFamily: 'Inter',
     colorScheme: ColorScheme.dark(
       surface: const Color.fromARGB(255, 39, 39, 39),
       primary: const Color.fromARGB(255, 122, 122, 122),
@@ -12,7 +13,8 @@ ThemeData darkMode = ThemeData(
     ));
 
 ThemeData lightMode = ThemeData(
-    fontFamily: GoogleFonts.inter().fontFamily,
+    // fontFamily: GoogleFonts.inter().fontFamily,
+    fontFamily: 'Inter',
     colorScheme: ColorScheme.light(
           surface: const Color.fromARGB(255, 255, 255, 255),
           primary: const Color.fromARGB(255, 234, 234, 234),
