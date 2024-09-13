@@ -5,23 +5,22 @@ import '../../providers/weather_provider.dart';
 import 'package:intl/intl.dart';
 
 class WeatherForecastScreen extends ConsumerStatefulWidget {
-  const WeatherForecastScreen({required this.lat, required this.lon, super.key});
+  const WeatherForecastScreen(
+      {required this.lat, required this.lon, super.key});
 
   final double lat;
   final double lon;
 
   @override
-  ConsumerState<WeatherForecastScreen> createState() => _WeatherForecastScreenState();
+  ConsumerState<WeatherForecastScreen> createState() =>
+      _WeatherForecastScreenState();
 }
 
-
 class _WeatherForecastScreenState extends ConsumerState<WeatherForecastScreen> {
-
-
   @override
   Widget build(BuildContext context) {
-    var coordinates = Tuple2(widget.lat, widget.lon);
-    final dailyWeather = ref.watch(dailyWeatherProvider(coordinates));
+    final coordinates = Tuple2(widget.lat, widget.lon);
+    var dailyWeather = ref.watch(dailyWeatherProvider(coordinates));
 
     return Scaffold(
       appBar: AppBar(
@@ -33,6 +32,13 @@ class _WeatherForecastScreenState extends ConsumerState<WeatherForecastScreen> {
             color: Theme.of(context).colorScheme.inversePrimary,
           ),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                ref.refresh(weatherProvider(coordinates));
+              },
+              icon: const Icon(Icons.refresh)),
+        ],
         title: Text(
           'Weather Forecast',
           style: TextStyle(
@@ -53,7 +59,8 @@ class _WeatherForecastScreenState extends ConsumerState<WeatherForecastScreen> {
               final dailyWeather = dailyWeatherList[index];
 
               return Container(
-                margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 padding: const EdgeInsets.all(12.0),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -75,7 +82,7 @@ class _WeatherForecastScreenState extends ConsumerState<WeatherForecastScreen> {
                   ],
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       DateFormat('MMMM d').format(dailyWeather.date),
@@ -109,28 +116,34 @@ class _WeatherForecastScreenState extends ConsumerState<WeatherForecastScreen> {
                                 width: 60,
                                 child: Text(
                                   DateFormat('HH:mm').format(
-                                    DateTime.fromMillisecondsSinceEpoch(weather.dateTimeUnix * 1000),
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                        weather.dateTimeUnix * 1000),
                                   ),
                                   style: const TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Text(
                                         '${weather.temperature.toStringAsFixed(1)}°C',
                                         style: const TextStyle(
-                                            fontSize: 16, fontWeight: FontWeight.w900),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w900),
                                       ),
                                       Text(
                                         weather.description,
                                         style: TextStyle(
                                           fontSize: 14,
-                                          color: Theme.of(context).colorScheme.inversePrimary,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .inversePrimary,
                                           fontWeight: FontWeight.w900,
                                         ),
                                         textAlign: TextAlign.end,
@@ -152,17 +165,12 @@ class _WeatherForecastScreenState extends ConsumerState<WeatherForecastScreen> {
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(
-
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(
-                onPressed: () {
-                  ref.refresh(dailyWeatherProvider(Tuple2(widget.lat, widget.lon)));
-                },
-                icon: Icon(Icons.refresh, size: 60, color: Colors.red.withOpacity(0.7)),
-              ),
+              Icon(Icons.wifi_off,
+                  size: 60, color: Colors.red.withOpacity(0.7)),
               Text(
                 'No Connection',
                 style: TextStyle(
@@ -170,10 +178,6 @@ class _WeatherForecastScreenState extends ConsumerState<WeatherForecastScreen> {
                   color: Theme.of(context).colorScheme.inversePrimary,
                 ),
               ),
-              Text(
-              "$error"
-                ),
-
             ],
           ),
         ),

@@ -110,136 +110,142 @@ class _HomePageState extends ConsumerState<HomePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: MainSearchBar(
-                      controller: searchController,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      if (searchController.text.isNotEmpty) {
-                        setState(() {
-                          city = searchController.text;
-                        });
-                      }
-                      searchController.clear();
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 12),
-                      decoration: BoxDecoration(
-                        // color: Theme.of(context).colorScheme.tertiary,
-                        // color: const Color.fromRGBO(23, 51, 63, 1),
-                        color: Colors.black54,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: const Icon(
-                        Icons.search_rounded,
-                        color: Colors.white,
+        child: RefreshIndicator(
+          onRefresh: () async{
+            ref.refresh(currentWeatherProvider(city));
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: MainSearchBar(
+                        controller: searchController,
                       ),
                     ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              currentWeather.when(
-                  data: (weather) {
-                    setState(() {
-                      isError = true;
-                    });
-                    return Column(
-                      children: [
-                        MainWeatherContainer(
-                          imgPath: weather.icon,
-                          location: weather.cityName,
-                          temperature: weather.temp.temp.toString(),
-                          description: weather.weatherDesc,
-                          feelsLike: weather.temp.feelsLike.toString(),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        if (searchController.text.isNotEmpty) {
+                          setState(() {
+                            city = searchController.text;
+                          });
+                        }
+                        ref.refresh(currentWeatherProvider(city));
+                        searchController.clear();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 12),
+                        decoration: BoxDecoration(
+                          // color: Theme.of(context).colorScheme.tertiary,
+                          // color: const Color.fromRGBO(23, 51, 63, 1),
+                          color: Colors.black54,
+                          borderRadius: BorderRadius.circular(30),
                         ),
-                        Row(
-                          children: [
-                            sevenDaysContainer(
-                                lat: weather.lat, lon: weather.lon),
-                            SecondaryContainer(
-                              title: 'Wind',
-                              imgPath: "images/wind.svg",
-                              content: Text(
-                                '${weather.windSpeed}m/s',
-                                style: const TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.w900,
-                                  color: Colors.white,
+                        child: const Icon(
+                          Icons.search_rounded,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                currentWeather.when(
+                    data: (weather) {
+                      setState(() {
+                        isError = true;
+                      });
+                      return Column(
+                        children: [
+                          MainWeatherContainer(
+                            imgPath: weather.icon,
+                            location: weather.cityName,
+                            temperature: weather.temp.temp.toString(),
+                            description: weather.weatherDesc,
+                            feelsLike: weather.temp.feelsLike.toString(),
+                          ),
+                          Row(
+                            children: [
+                              sevenDaysContainer(
+                                  lat: weather.lat, lon: weather.lon),
+                              SecondaryContainer(
+                                title: 'Wind',
+                                imgPath: "images/wind.svg",
+                                content: Text(
+                                  '${weather.windSpeed}m/s',
+                                  style: const TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w900,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            SecondaryContainer(
-                              title: 'Temperature',
-                              titleColor: Colors.white,
-                              imgPath: "images/temp.svg",
-                              gradient: LinearGradient(
-                                colors: [
-                                  Colors.blue.shade100.withOpacity(0.3),
-                                  Colors.blueAccent.shade100.withOpacity(0.5)
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              content: Column(
-                                children: [
-                                  Text(
-                                    'Min Temp: ${weather.temp.tempMin} °C',
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w900,
-                                        color: Colors.white),
-                                  ),
-                                  Text(
-                                    'Max Temp: ${weather.temp.tempMax} °C',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w900,
-                                      color: Colors.white,
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              SecondaryContainer(
+                                title: 'Temperature',
+                                titleColor: Colors.white,
+                                imgPath: "images/temp.svg",
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.blue.shade100.withOpacity(0.3),
+                                    Colors.blueAccent.shade100.withOpacity(0.5)
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                content: Column(
+                                  children: [
+                                    Text(
+                                      'Min Temp: ${weather.temp.tempMin} °C',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w900,
+                                          color: Colors.white),
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      'Max Temp: ${weather.temp.tempMax} °C',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w900,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            SecondaryContainer(
-                              content: Text(
-                                '${weather.temp.humidity}%',
-                                style: const TextStyle(
-                                    fontSize: 30.0,
-                                    fontWeight: FontWeight.w900,
-                                    color: Colors.white),
+                              SecondaryContainer(
+                                content: Text(
+                                  '${weather.temp.humidity}%',
+                                  style: const TextStyle(
+                                      fontSize: 30.0,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.white),
+                                ),
+                                title: 'Humidity',
+                                imgPath: 'images/humidity.svg',
                               ),
-                              title: 'Humidity',
-                              imgPath: 'images/humidity.svg',
-                            ),
-                          ],
-                        )
-                      ],
-                    );
-                  },
-                  loading: () => const CircularProgressIndicator(),
-                  error: (e, stack) {
-                    setState(() {
-                      isError = false;
-                    });
-                    return Center(child: displayError());
-                  }),
-            ],
+                            ],
+                          )
+                        ],
+                      );
+                    },
+                    loading: () => const CircularProgressIndicator(),
+                    error: (e, stack) {
+                      setState(() {
+                        isError = false;
+                      });
+                      return Center(child: displayError());
+                    }),
+              ],
+            ),
           ),
         ),
       ),

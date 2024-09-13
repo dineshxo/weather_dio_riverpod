@@ -10,8 +10,9 @@ class WeatherServices {
   WeatherServices({required this.dio});
    final Dio dio;
 
-
    Future<CurrentWeather> fetchCurrentWeather(String city)async{
+     print('$city - current');
+
      final String weatherCityURL= 'https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$APIKEY';
      try {
        final response = await dio.get(weatherCityURL);
@@ -32,8 +33,8 @@ class WeatherServices {
   Future<List<Weather>> fetchWeatherForecastData(
       {required double lat,required double lon}) async {
 
-      print('lat : $lat');
-      print('lon : $lon');
+      print('lat : $lat lon : $lon - forecast');
+
      final String weatherForecastURL = "https://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$lon&appid=$APIKEY";
     try {
       final response = await dio.get(weatherForecastURL);

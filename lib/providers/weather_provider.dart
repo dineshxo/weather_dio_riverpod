@@ -37,4 +37,3 @@ final dailyWeatherProvider = FutureProvider.family<List<DailyWeather>, Tuple2<do
   final weatherList = await ref.watch(weatherProvider(coordinates).future);
   return aggregateWeatherData(weatherList);
 });
-
