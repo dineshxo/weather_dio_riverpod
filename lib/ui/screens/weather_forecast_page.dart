@@ -4,17 +4,23 @@ import 'package:tuple/tuple.dart';
 import '../../providers/weather_provider.dart';
 import 'package:intl/intl.dart';
 
-class WeatherForecastScreen extends ConsumerWidget {
-  const WeatherForecastScreen({required this.lat,required this.lon, super.key,});
+class WeatherForecastScreen extends ConsumerStatefulWidget {
+  const WeatherForecastScreen(
+      {required this.lat, required this.lon, super.key});
 
   final double lat;
   final double lon;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<WeatherForecastScreen> createState() =>
+      _WeatherForecastScreenState();
+}
 
-    final coordinates = Tuple2(lat, lon);
-    final dailyWeather = ref.watch(dailyWeatherProvider(coordinates));
+class _WeatherForecastScreenState extends ConsumerState<WeatherForecastScreen> {
+  @override
+  Widget build(BuildContext context) {
+    final coordinates = Tuple2(widget.lat, widget.lon);
+    var dailyWeather = ref.watch(dailyWeatherProvider(coordinates));
 
     return Scaffold(
       appBar: AppBar(
@@ -26,6 +32,13 @@ class WeatherForecastScreen extends ConsumerWidget {
             color: Theme.of(context).colorScheme.inversePrimary,
           ),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                ref.refresh(weatherProvider(coordinates));
+              },
+              icon: const Icon(Icons.refresh)),
+        ],
         title: Text(
           'Weather Forecast',
           style: TextStyle(
@@ -46,13 +59,14 @@ class WeatherForecastScreen extends ConsumerWidget {
               final dailyWeather = dailyWeatherList[index];
 
               return Container(
-                margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 padding: const EdgeInsets.all(12.0),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
                       Colors.blue.shade100.withOpacity(0.4),
-                      Colors.blueAccent.shade100.withOpacity(0.6)
+                      Colors.blueAccent.shade100.withOpacity(0.6),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -68,20 +82,16 @@ class WeatherForecastScreen extends ConsumerWidget {
                   ],
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-
                     Text(
                       DateFormat('MMMM d').format(dailyWeather.date),
                       style: const TextStyle(
                         fontSize: 19,
                         fontWeight: FontWeight.bold,
-
                       ),
                     ),
                     const SizedBox(height: 8.0),
-
-
                     Column(
                       children: dailyWeather.hourlyData.map((weather) {
                         return Container(
@@ -93,7 +103,6 @@ class WeatherForecastScreen extends ConsumerWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-
                               SizedBox(
                                 width: 50,
                                 height: 50,
@@ -102,32 +111,41 @@ class WeatherForecastScreen extends ConsumerWidget {
                                   fit: BoxFit.contain,
                                 ),
                               ),
-
-                           const SizedBox(width: 10,),
+                              const SizedBox(width: 10),
                               SizedBox(
                                 width: 60,
                                 child: Text(
                                   DateFormat('HH:mm').format(
-                                    DateTime.fromMillisecondsSinceEpoch(weather.dateTimeUnix * 1000),
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                        weather.dateTimeUnix * 1000),
                                   ),
-                                  style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
-
-
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Text(
                                         '${weather.temperature.toStringAsFixed(1)}°C',
-                                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w900),
                                       ),
                                       Text(
                                         weather.description,
-                                        style:  TextStyle(fontSize: 14, color:Theme.of(context).colorScheme.inversePrimary,fontWeight: FontWeight.w900),
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .inversePrimary,
+                                          fontWeight: FontWeight.w900,
+                                        ),
                                         textAlign: TextAlign.end,
                                       ),
                                     ],
@@ -146,7 +164,23 @@ class WeatherForecastScreen extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+        error: (error, stack) => Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.wifi_off,
+                  size: 60, color: Colors.red.withOpacity(0.7)),
+              Text(
+                'No Connection',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

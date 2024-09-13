@@ -3,10 +3,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class FavoriteNotifier extends StateNotifier<List<String>> {
   FavoriteNotifier() : super([]) {
-    _loadFavorites();
+    loadFavorites();
   }
 
-  Future<void> _loadFavorites() async {
+  Future<void> loadFavorites() async {
     final prefs = await SharedPreferences.getInstance();
     final List<String>? favoriteList = prefs.getStringList('favorites');
     if (favoriteList != null) {
