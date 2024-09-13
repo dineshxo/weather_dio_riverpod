@@ -2,15 +2,16 @@
 
 ## Overview
 
-A sleek and intuitive weather application built with Flutter, designed to provide real-time weather updates and forecasts. This app leverages the OpenWeatherMap API to deliver accurate weather information based on user-selected locations.
+A sleek and intuitive weather application built with Flutter, designed to provide real-time weather updates and forecasts. 
 
 ## Features
 
 - **Current Weather:** View real-time weather conditions for your location.
-- **Hourly Forecast:** Get hourly updates on weather conditions throughout the day.
+- **Hourly Forecast:** Get 3 hourly updates on weather conditions throughout the day.
 - **Daily Forecast:** Check the weather forecast for the upcoming days.
 - **Favorites:** Save and manage your favorite locations for quick access to weather updates.
 - **Dark & Light Themes:** Switch between dark and light mode for an optimal viewing experience.
+  
 ## Getting Started
 
 This project is a starting point for a Flutter application.
