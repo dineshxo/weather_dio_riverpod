@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'package:weather_dio_riverpod/constants/constants.dart';
+
 import 'package:weather_dio_riverpod/models/current_weather.dart';
 
 import '../models/weather_forecast.dart';
@@ -9,6 +10,8 @@ import '../models/weather_forecast.dart';
 class WeatherServices {
   WeatherServices({required this.dio});
    final Dio dio;
+
+   String APIKEY =dotenv.env["APIKEY"] ?? "";
 
    Future<CurrentWeather> fetchCurrentWeather(String city)async{
      print('$city - current');
